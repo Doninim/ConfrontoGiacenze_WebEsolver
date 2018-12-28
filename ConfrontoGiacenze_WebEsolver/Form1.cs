@@ -201,7 +201,7 @@ namespace ConfrontoGiacenze_WebEsolver
 
             MailMessage myMail = new MailMessage();
             myMail.From = new MailAddress("mattia.datasoft@gmail.com");
-            myMail.To.Add("m.donini@datasoft.it");
+            myMail.To.Add("m.donini@datasoft.it, DavideCittone@add.it");
             myMail.CC.Add("v.righi@datasoft.it");
             myMail.Subject = "Controllo giacenze Esolver / Web";
             myMail.Priority = MailPriority.Normal;
@@ -301,6 +301,7 @@ namespace ConfrontoGiacenze_WebEsolver
                 MsgAddLog("Fine controllo giacenze Web / Esolver");
                 MsgAddLog("-----------------------------------------------------");
 
+                File.Delete(Directory.GetCurrentDirectory() + "\\ErrorLOG.log");
 
             }
             catch (Exception ex)
