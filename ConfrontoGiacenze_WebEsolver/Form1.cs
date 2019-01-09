@@ -198,12 +198,16 @@ namespace ConfrontoGiacenze_WebEsolver
 
         private void invio_mail(int anomalia)
         {
+            string pathINI = Directory.GetCurrentDirectory() + "\\ConfrontoGiacenzeINI.ini";
+
+            INIFile fileini = new INIFile(pathINI);
+
 
             MailMessage myMail = new MailMessage();
             myMail.From = new MailAddress("mattia.datasoft@gmail.com");
             myMail.To.Add("m.donini@datasoft.it, DavideCittone@add.it");
             myMail.CC.Add("v.righi@datasoft.it");
-            myMail.Subject = "Controllo giacenze Esolver / Web";
+            myMail.Subject = "Controllo giacenze Esolver / Web -- " + fileini.IniReadValue("Web", "Sezione1");
             myMail.Priority = MailPriority.Normal;
 
             if(anomalia == 1)
@@ -228,13 +232,31 @@ namespace ConfrontoGiacenze_WebEsolver
         {
             SqlConnection connWeb;
             int anomalia = 0;
-            
+
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\ErrorLOG.log"))
+            {
+                File.Delete(Directory.GetCurrentDirectory() + "\\ErrorLOG.log");
+            }
 
             MsgAddLog("-----------------------------------------------------");
             MsgAddLog(" Inzio processo");
             MsgAddLog("-----------------------------------------------------");
 
+            using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+            {
+                w.WriteLine(" Inzio processo");
+                w.Flush();
+                w.Close();
+            }
+
             MsgAddLog("Connessione DB in corso...");
+
+            using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+            {
+                w.WriteLine("Connessione DB in corso...");
+                w.Flush();
+                w.Close();
+            }
 
             try
             {
@@ -243,7 +265,21 @@ namespace ConfrontoGiacenze_WebEsolver
 
                 MsgAddLog("Connessione effettuata");
 
+                using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                {
+                    w.WriteLine("Connessione effettuata");
+                    w.Flush();
+                    w.Close();
+                }
+
                 MsgAddLog("Inizio controllo giacenze Web / Esolver...");
+
+                using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                {
+                    w.WriteLine("Inizio controllo giacenze Web / Esolver...");
+                    w.Flush();
+                    w.Close();
+                }
 
                 //RECORDSET GIACENZE WEB
 
@@ -286,6 +322,13 @@ namespace ConfrontoGiacenze_WebEsolver
 
                 MsgAddLog("Invio mail in corso...");
 
+                using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                {
+                    w.WriteLine("Invio mail in corso...");
+                    w.Flush();
+                    w.Close();
+                }
+
                 try
                 {
                     invio_mail(anomalia);
@@ -295,13 +338,27 @@ namespace ConfrontoGiacenze_WebEsolver
                     MsgAddLog("-----------------------------------------------------");
                     MsgAddLog("Errore nell'invio della mail");
                     MsgAddLog("-----------------------------------------------------");
+
+                    using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                    {
+                        w.WriteLine("Errore nell'invio della mail");
+                        w.Flush();
+                        w.Close();
+                    }
                 }
 
                 MsgAddLog("-----------------------------------------------------");
                 MsgAddLog("Fine controllo giacenze Web / Esolver");
                 MsgAddLog("-----------------------------------------------------");
 
-                File.Delete(Directory.GetCurrentDirectory() + "\\ErrorLOG.log");
+                using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                {
+                    w.WriteLine("Fine controllo giacenze Web / Esolver");
+                    w.Flush();
+                    w.Close();
+                }
+
+
 
             }
             catch (Exception ex)
@@ -310,6 +367,13 @@ namespace ConfrontoGiacenze_WebEsolver
                 MsgAddLog("ERRORE PROCEDURA");
                 MsgAddLog("-----------------------------------------------------");
                 MsgAddLog(ex.Message);
+
+                using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\LOGFILE.log"))
+                {
+                    w.WriteLine("ERRORE PROCEDURA: -- " + ex.Message);
+                    w.Flush();
+                    w.Close();
+                }
                 //this.Close();
             }
 
