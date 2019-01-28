@@ -78,12 +78,17 @@ namespace ConfrontoGiacenze_WebEsolver
                     }
 
                     //RECORDSET GIACENZE WEB
-                    String sqlWeb = @"SELECT CodiceArticolo, Codice, CodiceMagazzino, Quantita1, Quantita2, Quantita3, Quantita4, Quantita5, Quantita6, Quantita7, Quantita8, Quantita9, Quantita10,
-                            Quantita11, Quantita12, Quantita13, Quantita14, Quantita15, Quantita16, Quantita17, Quantita18, Quantita19, Quantita20,
-                            Quantita21, Quantita22, Quantita23, Quantita24, Quantita25, Quantita26, Quantita27, Quantita28, Quantita29, Quantita30
-                            FROM Varianti 
-                            WHERE CodiceMagazzino <> '0' 
-                            ORDER BY CodiceArticolo, Codice, CodiceMagazzino ";
+                    String sqlWeb = @"SELECT CodiceArticolo, Varianti.Codice, CodiceMagazzino, Quantita1, Quantita2, Quantita3, Quantita4, Quantita5, Quantita6, Quantita7, Quantita8, Quantita9, Quantita10,
+Quantita11, Quantita12, Quantita13, Quantita14, Quantita15, Quantita16, Quantita17, Quantita18, Quantita19, Quantita20,
+Quantita21, Quantita22, Quantita23, Quantita24, Quantita25, Quantita26, Quantita27, Quantita28, Quantita29, Quantita30,
+Taglia1, Taglia2, Taglia3, Taglia4, Taglia5, Taglia6, Taglia7, Taglia8, Taglia9, Taglia10,
+Taglia11, Taglia12, Taglia13, Taglia14, Taglia15, Taglia16, Taglia17, Taglia18, Taglia19, Taglia20,
+Taglia21, Taglia22, Taglia23, Taglia24, Taglia25, Taglia26, Taglia27, Taglia28, Taglia29, Taglia30
+FROM Varianti 
+INNER JOIN Articoli on Varianti.CodiceArticolo = articoli.Codice
+INNER JOIN Segnataglie ON Articoli.CodiceSegnataglie = Segnataglie.Codice
+WHERE CodiceMagazzino <> '0' 
+ORDER BY CodiceArticolo, Codice, CodiceMagazzino  ";
                     SqlCommand command = new SqlCommand(sqlWeb, connWeb);
                     command.CommandType = CommandType.Text;
 
@@ -223,11 +228,10 @@ namespace ConfrontoGiacenze_WebEsolver
                                     //Quantita diverse = scrivo su file articolo, variante e magazzino
                                     using (StreamWriter w = File.AppendText(Directory.GetCurrentDirectory() + "\\ErrorLOG.log"))
                                     {
-                                        w.Write("\r\n ");
-                                        w.WriteLine("  :{0} / {1} / {2}", myReader["CodiceArticolo"].ToString(), myReader["Codice"].ToString(), myReader["CodiceMagazzino"].ToString());
-                                        w.WriteLine("-------------------------------");
-                                        w.Flush();
-                                        w.Close();
+                                            w.Write("\r\n ");
+                                            w.Write("  :{0} / {1} / {2} / Taglia {3} / Qta web: {4} / Qta es: {5}", myReader["CodiceArticolo"].ToString(), myReader["Codice"].ToString(), myReader["CodiceMagazzino"].ToString(), myReader["Taglia" + i.ToString()].ToString(), myReader["Quantita" + i.ToString()].ToString(), giacEsolver[i - 1].ToString());
+                                            w.Flush();
+                                            w.Close();
                                     }
 
                                     anomalia = 1;
