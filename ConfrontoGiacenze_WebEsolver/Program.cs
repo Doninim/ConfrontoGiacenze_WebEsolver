@@ -254,7 +254,7 @@ ORDER BY CodiceArticolo, Codice, CodiceMagazzino  ";
                     {
                         MailMessage myMail = new MailMessage();
                         myMail.From = new MailAddress("mattia.datasoft@gmail.com");
-                        myMail.To.Add("m.donini@datasoft.it, DavideCittone@add.it");
+                        myMail.To.Add("m.donini@datasoft.it, informatica@comeiandco.com");
                         myMail.CC.Add("v.righi@datasoft.it");
                         myMail.Subject = "Controllo giacenze Esolver / Web -- " + fileini.IniReadValue("Web", "Sezione1");
                         myMail.Priority = MailPriority.Normal;
